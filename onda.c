@@ -38,7 +38,7 @@ int main()
   float xmin=0.0;
   float xmax=1.0;
   float deltax=(xmax-xmin)/(n_points);
-  float deltat=0.005;
+  float deltat=0.0005;
   float c=1.0;
   float r=c*(deltat/deltax);
 
@@ -76,13 +76,12 @@ int main()
     {
       x[i]=x[i-1]+deltax;
       u_initial[i]=exp(-((x[i]-0.3)*(x[i]-0.3))/0.01);
-      printf("%f %f \n",x[i],u_initial[i]);
     }
   
   //Resolvemos el primer paso pues es necesario
   for(i=1;i<n_points-1;i++)
     {
-      u_future[i]=u_initial[i]+(pow(r,2)/2.0)*(u_initial[i+1]-2.0*u_initial[i]+u_initial[i-1]);
+      u_future[i]=u_initial[i]+((pow(r,2)/2.0)*(u_initial[i+1]-(2.0*u_initial[i])+u_initial[i-1]));
     }
   //Refrescamos los vectores de la funciòn para variarla en el tiempo
   copy(u_initial,u_past,n_points);
