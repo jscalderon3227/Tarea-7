@@ -28,10 +28,11 @@ float *get_memory(int n_points)
 
 //Mètodo principal
 
-int main()
+int main(int argc, char **argv)
 {
   //Declaraciòn de constantes
-  int n_time=1000;
+
+  int n_time=atoi(argv[1]);
   int i;
   int j;
   int n_points=1000;
