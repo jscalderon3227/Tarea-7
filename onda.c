@@ -31,6 +31,7 @@ float * get_memory(int n_points)
 int main()
 {
   //Declaraciòn de constantes
+  int n_time=1000;
   int i;
   int j;
   int n_points=1000;
@@ -82,8 +83,21 @@ int main()
       u_future[i]=u_initial[i]+(pow(r,2)/2.0)*(u_initial[i+1]-2.0*u_initial[i]+u_initial[i-1]);
     }
   //Refrescamos los vectores de la funciòn para variarla en el tiempo
-  copy(u_initial,u_past);
-  copy(u_future,u_present);
+  copy(u_initial,u_past,n_points);
+  copy(u_future,u_present,n_points);
+  
+  //Ahora realizamos este mismo proceso para N iteraciones en el tiempo
+  for(j=0;j<n_time;j++)
+    {
+      for(i=1;i<n_points-1;i++)
+	{
+	  u_future[i]=(2.0*(1.0-pow(r,2)))*u_present[i]-u_past[i]+(pow(r,2))*(u_present[i+1]+u_present[i-1]);
+	}
+      copy(u_present,u_past,n_points);
+      copy(u_future,u_present,n_points);
+    }
+  
   return 0;
+  
 }
 
