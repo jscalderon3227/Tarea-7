@@ -15,10 +15,10 @@ void copy(float *u_past, float *u_new, int n_points)
 
 // Mètodo que crea el espacio en memoria
 
-float * get_memory(int n_points)
+float *get_memory(int n_points)
  {
-    float * x;
-    if(!(x = malloc(sizeof(float) * n_points)))
+    float *x;
+    if(!(x = malloc(sizeof(float)*n_points)))
       {
         printf("problem with memory allocation");
         exit(1);
@@ -37,12 +37,13 @@ int main()
   int n_points=1000;
   float xmin=0.0;
   float xmax=1.0;
-  float deltax=(xmax-xmin)/n_points;
+  float deltax=(xmax-xmin)/(n_points);
   float deltat=0.005;
   float c=1.0;
-  float r=c*deltat/deltax;
+  float r=c*(deltat/deltax);
 
   //Declaraciòn de arreglos
+
   float *x;
   float *u_initial;
   float *u_present;
@@ -69,16 +70,17 @@ int main()
 
   u_future[0]=0.0;
   u_future[n_points-1]=0.0;
-  
+   
   //Resolvemos la condicion inicial
   for(i=1;i<n_points;i++)
     {
       x[i]=x[i-1]+deltax;
-      u_initial[i]=exp(((x[i]-0.3)*(x[i]-0.3))/0.01);
+      u_initial[i]=exp(-((x[i]-0.3)*(x[i]-0.3))/0.01);
+      printf("%f %f \n",x[i],u_initial[i]);
     }
-
+  
   //Resolvemos el primer paso pues es necesario
-  for(i=1;n_points-1;i++)
+  for(i=1;i<n_points-1;i++)
     {
       u_future[i]=u_initial[i]+(pow(r,2)/2.0)*(u_initial[i+1]-2.0*u_initial[i]+u_initial[i-1]);
     }
@@ -96,14 +98,17 @@ int main()
       copy(u_present,u_past,n_points);
       copy(u_future,u_present,n_points);
     }
+  //Veamos si es correcto el r
+  printf("%f \n",r);
   //Ahora exportamos los datos en un archivo .dat
-
+  
   FILE *in =fopen("datos.dat","w");
   for(i=0;i<n_points;i++)
     {
       fprintf(in,"%f %f \n",x[i],u_present[i]);
     }
   fclose(in);
+   
   return 0;
   
 }
